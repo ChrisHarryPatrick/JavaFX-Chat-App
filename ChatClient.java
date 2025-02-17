@@ -59,57 +59,56 @@ public class ChatClient extends Application {  // ✅ Must extend Application
     }
 
     private void connectToServer() {
-    try {
-        socket = new Socket("127.0.0.1", 5000);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+        try {
+            socket = new Socket("127.0.0.1", 5000);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
 
-        // ✅ Ask for the username before connecting
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Login");
-        dialog.setHeaderText("Enter your name:");
-        dialog.setContentText("Name:");
-        Optional<String> result = dialog.showAndWait();
-        
-        if (result.isPresent() && !result.get().trim().isEmpty()) {
-            clientName = result.get().trim();
-        } else {
-            clientName = "User" + new Random().nextInt(1000);  // Assign random name if empty
-        }
+            // ✅ Ask for the username before connecting
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Login");
+            dialog.setHeaderText("Enter your name:");
+            dialog.setContentText("Name:");
+            Optional<String> result = dialog.showAndWait();
 
-        out.println(clientName);  // ✅ Send username to server
+            if (result.isPresent() && !result.get().trim().isEmpty()) {
+                clientName = result.get().trim();
+            } else {
+                clientName = "User" + new Random().nextInt(1000);  // Assign random name if empty
+            }
 
-        new Thread(() -> {
-            try {
-                String msg;
-                while ((msg = in.readLine()) != null) {
-                    final String finalMsg = msg;
-                    Platform.runLater(() -> {
-                        if (finalMsg.startsWith("@users ")) {
-                            updateUsersList(finalMsg.substring(7));
-                        } else {
-                            chatArea.appendText(finalMsg + "\n");
-                        }
-                    });
+            out.println(clientName);  // ✅ Send username to server
+
+            new Thread(() -> {
+                try {
+                    String msg;
+                    while ((msg = in.readLine()) != null) {
+                        final String finalMsg = msg;
+                        Platform.runLater(() -> {
+                            if (finalMsg.startsWith("@users ")) {
+                                updateUsersList(finalMsg.substring(7));
+                            } else {
+                                chatArea.appendText(finalMsg + "\n");
+                            }
+                        });
+                    }
+                } catch (IOException ignored) {
                 }
-            } catch (IOException ignored) {}
-        }).start();
+            }).start();
 
-    } catch (IOException e) {
-        e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
 
-private void updateUsersList(String userListData) {
-    Platform.runLater(() -> {
-        users.setAll(userListData.split(","));
-    });
-}
-
+    private void updateUsersList(String userListData) {
+        Platform.runLater(() -> {
+            users.setAll(userListData.split(","));
+        });
+    }
 
     private void sendMessage() {
         out.println(messageField.getText());
         messageField.clear();
     }
 }
-

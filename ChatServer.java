@@ -89,16 +89,18 @@ class ClientHandler implements Runnable {
 
             String message;
             while ((message = in.readLine()) != null) {
-    String formattedMessage = clientName + ": " + message;
-    System.out.println(formattedMessage);
-    ChatServer.broadcastMessage(formattedMessage, this);
-}
-
+                String formattedMessage = clientName + ": " + message;
+                System.out.println(formattedMessage);
+                ChatServer.broadcastMessage(formattedMessage, this);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             ChatServer.removeClient(this);
-            try { socket.close(); } catch (IOException ignored) {}
+            try {
+                socket.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -106,6 +108,3 @@ class ClientHandler implements Runnable {
         out.println(message);
     }
 }
-
-
-
