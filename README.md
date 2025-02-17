@@ -75,10 +75,19 @@ To test multiple users, open new terminal windows and run the client command aga
 📌 File Structure
 
 JavaFX-Chat-App/
+
 │── ChatServer.java   # Server-side logic, includes ClientHandler class
+
+
 │── ChatClient.java   # JavaFX GUI client
+
+
 │── chat_history.txt   # (Auto-generated) Stores message history
+
+
 │── .gitignore   # Ignores unnecessary files
+
+
 │── README.md   # Documentation
 
 ---
@@ -86,6 +95,8 @@ JavaFX-Chat-App/
 📌 .gitignore (Prevents Uploading Unnecessary Files)
 
 *.class
+
+
 chat_history.txt
 
 ---
