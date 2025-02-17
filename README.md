@@ -28,6 +28,8 @@ Download JavaFX SDK from (https://jdk.java.net/), then extract it to `/opt/javaf
 2️⃣ Clone This Repository
 
 git clone https://github.com/ChrisHarryPatrick/JavaFX-Chat-App.git
+
+
 cd JavaFX-Chat-App
 
 
