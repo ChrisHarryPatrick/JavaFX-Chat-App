@@ -1,6 +1,6 @@
 JavaFX Chat Application
 
-A real-time JavaFX-based Chat Application that allows users to send messages to multiple users with a **graphical user interface (GUI). The application supports private messaging, timestamps, and an online user list.
+A real-time JavaFX-based Chat Application that allows users to send messages to multiple users with a graphical user interface (GUI). The application supports private messaging, timestamps, and an online user list.
 
 ---
 
@@ -39,7 +39,7 @@ javac ChatServer.java
 
 Compile the Client (JavaFX Required)
 
-javac --module-path /opt/javafx/lib --add-modules javafx.controls,javafx.fxml ChatClient.java
+javac --module-path /opt/javafx/openjfx-23.0.2_macos-x64_bin-sdk/lib --add-modules javafx.controls,javafx.fxml ChatClient.java
 
 ---
 
@@ -53,7 +53,8 @@ java ChatServer
 
 2️⃣ Start the Chat Client (GUI)
 
-java --module-path /opt/javafx/lib --add-modules javafx.controls,javafx.fxml ChatClient
+java --module-path /opt/javafx/openjfx-23.0.2_macos-x64_bin-sdk/lib --add-modules javafx.controls,javafx.fxml ChatClient
+
 
 ✅ A JavaFX chat window should open, asking for a username.
 

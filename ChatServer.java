@@ -23,10 +23,32 @@ public class ChatServer {
     }
 
     static void broadcastMessage(String message, ClientHandler sender) {
-        String timestampedMessage = getTimestamp() + " " + message;
+        String timestamp = getTimestamp();
+        String timestampedMessage = timestamp + " " + sender.clientName + ": " + message;
         saveChatHistory(timestampedMessage);
+
+        if (message.startsWith("@private ")) {
+            String[] parts = message.split(" ", 3);
+            if (parts.length >= 3) {
+                String recipientName = parts[1].trim();
+                String privateMessage = parts[2].trim();
+
+                ClientHandler recipient = clientMap.get(recipientName);
+                if (recipient != null) {
+                    String privateTimestampedMessage = timestamp + " [PRIVATE] " + sender.clientName + ": " + privateMessage;
+                    recipient.sendMessage(privateTimestampedMessage);
+                    sender.sendMessage(timestamp + " [PRIVATE to " + recipientName + "] " + privateMessage);
+                } else {
+                    sender.sendMessage(timestamp + " [ERROR] User " + recipientName + " not found.");
+                }
+                return;
+            }
+        }
+
         for (ClientHandler client : clients) {
-            client.sendMessage(timestampedMessage);
+            if (client != sender) {
+                client.sendMessage(timestampedMessage);
+            }
         }
     }
 
@@ -89,9 +111,13 @@ class ClientHandler implements Runnable {
 
             String message;
             while ((message = in.readLine()) != null) {
-                String formattedMessage = clientName + ": " + message;
-                System.out.println(formattedMessage);
-                ChatServer.broadcastMessage(formattedMessage, this);
+                if (message.startsWith("@private ")) {
+                    // Send private message
+                    ChatServer.broadcastMessage(message, this);
+                } else {
+                    // Normal public message
+                    ChatServer.broadcastMessage(message, this);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
